@@ -1,1 +1,0 @@
-{"version":3,"file":"action.d.ts","sourceRoot":"","sources":["../src/action.ts"],"names":[],"mappings":"AAEA,wBAAgB,WAAW,CACvB,MAAM,EAAE,GAAG,CAAC,MAAM,CAAC,EACnB,SAAS,EAAE,GAAG,CAAC,MAAM,CAAC;;EASzB;AAED,wBAAgB,UAAU,CACtB,UAAU,EAAE,GAAG,CAAC,MAAM,CAAC,EACvB,UAAU,EAAE,MAAM,EAClB,aAAa,EAAE,MAAM,EACrB,cAAc,EAAE,OAAO,GACxB,MAAM,EAAE,CAgCV"}
