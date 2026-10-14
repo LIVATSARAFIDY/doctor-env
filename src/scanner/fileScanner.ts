@@ -28,9 +28,19 @@ export function scanFiles(
     }
 
     directories.forEach((directory) => {
-        if (fs.existsSync(directory)) {
-            scanDirectory(directory);
+        if (!fs.existsSync(directory)) {
+            throw new Error(
+                `Source directory not found: ${directory}`
+            );
         }
+
+        if (!fs.statSync(directory).isDirectory()) {
+            throw new Error(
+                `Source path is not a directory: ${directory}`
+            );
+        }
+
+        scanDirectory(directory);
     });
 
     return files;

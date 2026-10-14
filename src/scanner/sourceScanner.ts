@@ -3,12 +3,19 @@ import fs from "node:fs";
 import { scanFiles } from "./fileScanner.js";
 import { detectVariables } from "./variableDetector.js";
 
+export interface SourceScanResult {
+    usedVars: Set<string>;
+    filesScanned: number;
+    filesFailed: string[];
+}
+
 export function scanSource(
     directories: string[],
     extensions: string[],
     envVars: Set<string>
-): Set<string> {
+): SourceScanResult {
     const usedVars = new Set<string>();
+    const filesFailed: string[] = [];
 
     const files = scanFiles(
         directories,
@@ -31,9 +38,13 @@ export function scanSource(
                 usedVars.add(variable);
             });
         } catch {
-            // The caller will handle read errors later.
+            filesFailed.push(filePath);
         }
     });
 
-    return usedVars;
+    return {
+        usedVars,
+        filesScanned: files.length,
+        filesFailed,
+    };
 }

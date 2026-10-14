@@ -1,15 +1,20 @@
 {
-  "name": "env-doctor",
+  "name": "@tommdev/env-doctor",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Synchronize and validate .env files as a team",
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsc"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "dotenv",
+    "env",
+    "environment",
+    "cli",
+    "developer-tools"
+  ],
+  "author": "LIVATSARAFIDY PIERRE THOMAS",
+  "license": "MIT",
   "type": "module",
   "dependencies": {
     "chalk": "^5.6.2",
@@ -22,6 +27,11 @@
     "typescript": "^6.0.3"
   },
   "bin": {
-    "env-doctor": "./dist/index.js"
-  }
+    "env-doctor": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ]
 }

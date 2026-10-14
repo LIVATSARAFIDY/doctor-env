@@ -3,7 +3,7 @@ import fs from "node:fs";
 import pc from "picocolors";
 
 import { parseEnv } from "../../env/parser.js";
-import { compareSets } from "../../env/comparator.js";
+import { compareEnvs } from "../../env/comparator.js";
 
 export function registerCompareCommand(program: Command): void {
     program
@@ -14,7 +14,6 @@ export function registerCompareCommand(program: Command): void {
         .action((options) => {
             const targetPath = options.target;
             const referencePath = options.reference;
-
 
             if (!fs.existsSync(targetPath)) {
                 console.error(
@@ -29,6 +28,7 @@ export function registerCompareCommand(program: Command): void {
                 );
                 process.exit(1);
             }
+
             if (!fs.existsSync(referencePath)) {
                 console.error(
                     `${pc.red("❌ Error: Reference file not found:")} ${referencePath}`
@@ -49,17 +49,63 @@ export function registerCompareCommand(program: Command): void {
             const envTarget = parseEnv(targetPath);
             const envReference = parseEnv(referencePath);
 
-            const result = compareSets(
-                envTarget,
-                envReference
+            const targetValues = new Map(
+                Array.from(envTarget, ([key, variable]) => [
+                    key,
+                    variable.value,
+                ])
             );
 
-            console.log(`\n${pc.red("✖  Missing variables:")}`);
+            const referenceValues = new Map(
+                Array.from(envReference, ([key, variable]) => [
+                    key,
+                    variable.value,
+                ])
+            );
+
+            const result = compareEnvs(
+                targetValues,
+                referenceValues
+            );
+
+            console.log(`\n${pc.blue("Environment comparison:")}`);
+
+            console.log(`\n${pc.green("✓ Matching variables:")}`);
+
+            if (result.matching.length === 0) {
+                console.log("None");
+            } else {
+                result.matching.forEach((variable) => {
+                    console.log(`- ${variable}`);
+                });
+            }
+
+            console.log(`\n${pc.yellow("⚠ Different values:")}`);
+
+            if (result.different.length === 0) {
+                console.log("None");
+            } else {
+                result.different.forEach((variable) => {
+                    console.log(`- ${variable}`);
+                });
+            }
+
+            console.log(`\n${pc.red("✖ Missing variables:")}`);
 
             if (result.missing.length === 0) {
-                console.log("✓ None");
+                console.log("None");
             } else {
                 result.missing.forEach((variable) => {
+                    console.log(`- ${variable}`);
+                });
+            }
+
+            console.log(`\n${pc.magenta("+ Extra variables:")}`);
+
+            if (result.extra.length === 0) {
+                console.log("None");
+            } else {
+                result.extra.forEach((variable) => {
                     console.log(`- ${variable}`);
                 });
             }
